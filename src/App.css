@@ -1,0 +1,60 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Syne:wght@400;500;700;800&display=swap');
+
+@theme {
+  --font-sans: "Syne", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  --color-lab-bg:         #060606;
+  --color-lab-ink:        #d4d4d4;
+  --color-lab-accent:     #00ff9d;
+  --color-lab-accent-dim: rgba(0, 255, 157, 0.15);
+  --color-lab-border:     rgba(255, 255, 255, 0.08);
+}
+
+@layer base {
+  body {
+    @apply bg-lab-bg text-lab-ink font-sans;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  /* Hide scrollbars on grid overflow */
+  .scrollbar-hide::-webkit-scrollbar { display: none; }
+  .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+}
+
+/* Glass card utility */
+.glass {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* Scanline CRT effect */
+.scanline {
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent,
+    transparent 2px,
+    rgba(0, 255, 157, 0.015) 2px,
+    rgba(0, 255, 157, 0.015) 4px
+  );
+  pointer-events: none;
+}
+
+/* Terminal accent glow for text */
+.terminal-glow {
+  text-shadow: 0 0 10px var(--color-lab-accent);
+}
+
+/* Custom 18-column grid — Tailwind JIT may not generate this */
+.grid-cols-18 {
+  grid-template-columns: repeat(18, minmax(0, 1fr));
+}
