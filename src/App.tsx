@@ -2,6 +2,81 @@ import React from 'react';
 import { ExternalLink } from 'lucide-react';
 import { PeriodicTable } from './components/PeriodicTable';
 
+// Ntanglement icon inlined as JSX — preserves SVG animations
+function NtanglementIcon({ size = 28 }: { size?: number }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      xmlnsXlink="http://www.w3.org/1999/xlink"
+      viewBox="0 0 600 600"
+      width={size}
+      height={size}
+      style={{ flexShrink: 0 }}
+    >
+      <defs>
+        <radialGradient id="bgGrad" cx="50%" cy="50%" r="70%">
+          <stop offset="0%" stopColor="#0f2027" />
+          <stop offset="100%" stopColor="#01030a" />
+        </radialGradient>
+        <linearGradient id="nGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#00f5ff" />
+          <stop offset="100%" stopColor="#0066ff" />
+        </linearGradient>
+        <filter id="glow">
+          <feGaussianBlur stdDeviation="4" result="blur" />
+          <feMerge>
+            <feMergeNode in="blur" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+      </defs>
+
+      <rect width="600" height="600" fill="url(#bgGrad)" rx="80" />
+
+      <text
+        x="300" y="360"
+        textAnchor="middle"
+        fontSize="260"
+        fontFamily="Orbitron, monospace"
+        fill="url(#nGrad)"
+        filter="url(#glow)"
+      >
+        N
+      </text>
+
+      <path
+        id="hdrOrbit"
+        d="M115 240 A220 120 -20 1 1 485 360 A220 120 -20 1 1 115 240"
+        fill="none"
+        stroke="#00eaff"
+        strokeWidth="2.5"
+        strokeDasharray="6 6"
+        opacity="0.6"
+        filter="url(#glow)"
+      >
+        <animate
+          attributeName="stroke-dashoffset"
+          from="0" to="-60"
+          dur="3s"
+          repeatCount="indefinite"
+        />
+      </path>
+
+      <circle r="18" fill="#00ffff" filter="url(#glow)">
+        <animateMotion dur="6s" repeatCount="indefinite" rotate="auto">
+          <mpath href="#hdrOrbit" />
+        </animateMotion>
+      </circle>
+
+      <circle r="18" fill="#ff00ff" filter="url(#glow)">
+        <animateMotion dur="6s" begin="3s" repeatCount="indefinite" rotate="auto">
+          <mpath xlinkHref="#hdrOrbit" />
+        </animateMotion>
+      </circle>
+    </svg>
+  );
+}
+
 export default function App() {
   return (
     <div className="min-h-screen bg-lab-bg text-lab-ink overflow-x-hidden font-sans">
@@ -32,79 +107,62 @@ export default function App() {
               href="https://ntanglement.dev"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 group"
+              className="flex items-center gap-2.5 group"
             >
-              {/* N-mark logo */}
-              <div
-                className="w-7 h-7 rounded-md flex items-center justify-center flex-shrink-0"
-                style={{
-                  background: 'linear-gradient(135deg, rgba(0,255,157,0.15), rgba(0,255,157,0.05))',
-                  border: '1px solid rgba(0,255,157,0.25)',
-                }}
-              >
-                <span
-                  className="font-mono font-bold text-sm leading-none"
-                  style={{ color: '#00ff9d' }}
-                >
-                  N
+              <NtanglementIcon size={32} />
+              <div>
+                <span className="block font-mono text-xs tracking-widest uppercase text-white/50 group-hover:text-white/80 transition-colors">
+                  Ntanglement
+                </span>
+                <span className="block font-mono text-[8px] tracking-widest uppercase text-white/20">
+                  Digital Laboratory
                 </span>
               </div>
-              <span className="font-mono text-xs tracking-widest uppercase text-white/40 group-hover:text-white/70 transition-colors">
-                Ntanglement
-              </span>
             </a>
 
-            {/* Right: version pill */}
-            <div className="flex items-center gap-3">
-              <span
-                className="font-mono text-[9px] uppercase tracking-widest px-2.5 py-1 rounded-full"
-                style={{
-                  background: 'rgba(0,255,157,0.08)',
-                  border: '1px solid rgba(0,255,157,0.2)',
-                  color: 'rgba(0,255,157,0.7)',
-                }}
-              >
-                v0.1.0 — beta
-              </span>
-            </div>
+            {/* Version pill */}
+            <span
+              className="font-mono text-[9px] uppercase tracking-widest px-2.5 py-1 rounded-full"
+              style={{
+                background: 'rgba(0,255,157,0.08)',
+                border: '1px solid rgba(0,255,157,0.2)',
+                color: 'rgba(0,255,157,0.7)',
+              }}
+            >
+              v0.1.0 — beta
+            </span>
           </div>
 
           {/* Product identity */}
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
             <div className="space-y-3">
-              {/* Product label */}
               <div className="flex items-center gap-2">
-                <div
-                  className="w-1.5 h-1.5 rounded-full"
-                  style={{ background: '#00ff9d' }}
-                />
-                <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/30">
-                  Ntanglement / Product
+                <div className="w-1.5 h-1.5 rounded-full" style={{ background: '#00ff9d' }} />
+                <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/25">
+                  Ntanglement / Product 01
                 </span>
               </div>
 
-              {/* Product name */}
               <div className="flex items-baseline gap-4">
                 <h1
-                  className="text-6xl md:text-8xl font-bold font-mono tracking-tighter uppercase leading-none"
+                  className="text-6xl md:text-8xl font-bold font-mono uppercase leading-none"
                   style={{ letterSpacing: '-0.04em' }}
                 >
                   Valency
                 </h1>
-                <span className="font-mono text-sm text-white/20 hidden md:block">
+                <span className="font-mono text-sm text-white/15 hidden md:block">
                   — periodic table
                 </span>
               </div>
 
-              {/* Tagline */}
               <p className="text-white/35 text-sm leading-relaxed font-sans max-w-md">
-                An interactive reference for the elements. Hover to explore
-                properties, configurations, and physical data.
+                An interactive reference for the 118 elements. Hover to explore
+                properties, electron configurations, and physical data.
               </p>
             </div>
 
-            {/* Right: stat pills */}
-            <div className="flex flex-wrap gap-2 md:flex-col md:items-end md:gap-2">
+            {/* Stat pills */}
+            <div className="flex flex-wrap gap-2 md:flex-col md:items-end">
               {[
                 { label: 'Elements', value: '118' },
                 { label: 'Properties', value: '12+' },
@@ -138,18 +196,8 @@ export default function App() {
         {/* ── FOOTER ─────────────────────────────────────────────────────── */}
         <footer className="border-t border-white/5 pt-8">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-
-            {/* Left: brand signature */}
             <div className="flex items-center gap-3">
-              <div
-                className="w-6 h-6 rounded flex items-center justify-center"
-                style={{
-                  background: 'rgba(0,255,157,0.08)',
-                  border: '1px solid rgba(0,255,157,0.15)',
-                }}
-              >
-                <span className="font-mono font-bold text-xs" style={{ color: '#00ff9d' }}>N</span>
-              </div>
+              <NtanglementIcon size={22} />
               <div>
                 <p className="font-mono text-[9px] uppercase tracking-widest text-white/20">
                   Valency — an Ntanglement product
@@ -160,7 +208,6 @@ export default function App() {
               </div>
             </div>
 
-            {/* Right: links */}
             <div className="flex items-center gap-5">
               {[
                 { label: 'Ntanglement', href: 'https://ntanglement.dev' },
