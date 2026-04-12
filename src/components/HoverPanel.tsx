@@ -380,8 +380,7 @@ function PanelBody({
 
 // ── Main export ───────────────────────────────────────────────────────────────
 export const HoverPanel: React.FC<HoverPanelProps> = ({
-  element, position, isTouchDevice, onClose,
-, onShare,
+  element, position, isTouchDevice, onClose, onShare,
 }) => {
 
   // ── MOBILE bottom sheet ───────────────────────────────────────────────────
