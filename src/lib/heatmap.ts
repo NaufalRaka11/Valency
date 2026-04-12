@@ -5,51 +5,65 @@ export interface HeatmapMode {
   label: string;
   unit: string;
   getValue: (el: Element) => number | null;
-  stops: string[]; // 2–3 color stops, dark → vivid
+  stops: string[]; // low → mid → high, all readable on dark bg
 }
 
+/**
+ * Color rules for dark background readability:
+ * - No stop darker than ~#1a or lower channel average < 60
+ * - Low end: cool muted but still visible (deep blue, slate, teal)
+ * - High end: warm vivid (yellow, orange, bright cyan)
+ * - Every stop must read clearly as a cell fill at 40% opacity
+ *   AND as a symbol color at full brightness
+ */
 export const HEATMAP_MODES: HeatmapMode[] = [
   {
     key: 'electronegativity',
     label: 'Electronegativity',
     unit: 'Pauling',
     getValue: el => el.electronegativity_pauling,
-    stops: ['#1e3a5f', '#38bdf8', '#f0f9ff'],
+    // cool slate → sky blue → bright yellow  (low=calm, high=reactive)
+    stops: ['#475569', '#38bdf8', '#fde047'],
   },
   {
     key: 'atomic_mass',
     label: 'Atomic mass',
     unit: 'u',
     getValue: el => el.atomic_mass,
-    stops: ['#052e16', '#16a34a', '#bbf7d0'],
+    // muted teal → green → lime  (light → heavy)
+    stops: ['#2dd4bf', '#4ade80', '#a3e635'],
   },
   {
     key: 'boil',
     label: 'Boiling point',
     unit: 'K',
     getValue: el => el.boil,
-    stops: ['#1c1917', '#dc2626', '#fef08a'],
+    // cool blue → orange → bright yellow  (cold → scorching)
+    stops: ['#60a5fa', '#f97316', '#fde047'],
   },
   {
     key: 'melt',
     label: 'Melting point',
     unit: 'K',
     getValue: el => el.melt,
-    stops: ['#1e1b4b', '#7c3aed', '#fbbf24'],
+    // slate → violet → amber  (low → high melting)
+    stops: ['#94a3b8', '#a78bfa', '#fbbf24'],
   },
   {
     key: 'density',
     label: 'Density',
     unit: 'g/cm³',
     getValue: el => el.density,
-    stops: ['#0c0a09', '#9333ea', '#e879f9'],
+    // light cyan → purple → pink  (light → dense)
+    stops: ['#67e8f9', '#8b5cf6', '#f472b6'],
   },
   {
     key: 'electron_affinity',
     label: 'Electron affinity',
     unit: 'kJ/mol',
     getValue: el => el.electron_affinity,
-    stops: ['#042f2e', '#0d9488', '#99f6e4'],
+    // muted green → teal → bright cyan
+    stops: ['#6ee7b7', '#14b8a6', '#22d3ee'],
   },
 ];
 
@@ -74,7 +88,6 @@ function hexToRgb(hex: string) {
   };
 }
 
-// Interpolate across N stops
 export function interpolateColor(t: number, stops: string[]): string {
   if (stops.length === 1) return stops[0];
   const segments = stops.length - 1;
@@ -83,10 +96,7 @@ export function interpolateColor(t: number, stops: string[]): string {
   const local = scaled - idx;
   const a = hexToRgb(stops[idx]);
   const b = hexToRgb(stops[idx + 1]);
-  const r = Math.round(a.r + (b.r - a.r) * local);
-  const g = Math.round(a.g + (b.g - a.g) * local);
-  const bl = Math.round(a.b + (b.b - a.b) * local);
-  return `rgb(${r},${g},${bl})`;
+  return `rgb(${Math.round(a.r + (b.r - a.r) * local)},${Math.round(a.g + (b.g - a.g) * local)},${Math.round(a.b + (b.b - a.b) * local)})`;
 }
 
 export function computeRange(
